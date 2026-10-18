@@ -1,6 +1,7 @@
 import glob
 import pandas as pd
-
+import os
+import matplotlib.pyplot as plt
 # ANSWERS
 # Property types: Residential, ResidentialLease, Land, ResidentialIncome, ManufacturedInPark, CommercialSale, CommercialLease, BusinessOpportunity
 # Keep rows PropertyType == Residential: sold: 495,321 rows; listings: 625,325 rows
@@ -37,3 +38,14 @@ for name in ["sold", "listings"]:
 fields = sold[["ClosePrice", "LivingArea", "DaysOnMarket"]].apply(pd.to_numeric, errors="coerce")
 print("\nNumeric summary (sold):")
 print(fields.describe(percentiles=[0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99]))
+os.makedirs("figures", exist_ok=True)
+for col in ["ClosePrice", "ListPrice", "OriginalListPrice", "LivingArea", "LotSizeAcres", "BedroomsTotal", "BathroomsTotalInteger", "DaysOnMarket", "YearBuilt"]:
+    s = pd.to_numeric(sold[col], errors="coerce").dropna()
+    s = s[(s >= s.quantile(0.01)) & (s <= s.quantile(0.99))]
+    fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+    ax[0].hist(s, bins=50)
+    ax[0].set_title(col + " histogram")
+    ax[1].boxplot(s, vert=False)
+    ax[1].set_title(col + " boxplot")
+    fig.savefig(f"figures/{col}.png")
+    plt.close(fig)
