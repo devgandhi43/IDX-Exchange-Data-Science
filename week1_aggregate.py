@@ -17,7 +17,7 @@ Sold:
     Rows after concat:                  736,545
     Rows after Residential filter:      495,321
 Listings:
-    Months loaded:                      3
+    Months loaded:                      33
     Rows before concat (sum of files):  982,865
     Rows after concat:                  982,865
     Rows after Residential filter:      625,325
